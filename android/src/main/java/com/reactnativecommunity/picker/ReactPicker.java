@@ -33,6 +33,10 @@ public class ReactPicker extends AppCompatSpinner {
   private final OnItemSelectedListener mItemSelectedListener = new OnItemSelectedListener() {
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+      if ("skip".equals(parent.getTag())) {
+        parent.setTag("");
+        return;
+      }
       if (mOnSelectListener != null) {
         mOnSelectListener.onItemSelected(position);
       }
@@ -40,6 +44,10 @@ public class ReactPicker extends AppCompatSpinner {
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+      if ("skip".equals(parent.getTag())) {
+        parent.setTag("");
+        return;
+      }
       if (mOnSelectListener != null) {
         mOnSelectListener.onItemSelected(-1);
       }
@@ -170,9 +178,8 @@ public class ReactPicker extends AppCompatSpinner {
    */
   private void setSelectionWithSuppressEvent(int position) {
     if (position != getSelectedItemPosition()) {
-      setOnItemSelectedListener(null);
+      setTag("skip");
       setSelection(position, false);
-      setOnItemSelectedListener(mItemSelectedListener);
     }
   }
 
